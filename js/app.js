@@ -81,7 +81,9 @@ document.addEventListener('DOMContentLoaded', function () {
         form.addEventListener('submit', handleSubmit);
 
         // Reset button
-        resetBtn.addEventListener('click', resetForm);
+        if (resetBtn) {
+            resetBtn.addEventListener('click', resetForm);
+        }
 
         // Phone input - only numbers
         phoneInput.addEventListener('input', (e) => {
