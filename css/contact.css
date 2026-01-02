@@ -1,174 +1,151 @@
-/* Contact Section Styles */
+/* Compact List Styles (iOS Settings Style) */
 .contact-section {
-    margin-top: 40px;
-    padding-top: 20px;
-    border-top: 1px dashed var(--border);
+    margin-top: 32px;
+    padding: 0 16px;
+    /* Add horizontal padding to avoid edges */
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
-.contact-card {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
+.compact-list {
+    background: var(--surface);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    border: 1px solid var(--border);
 }
 
-.contact-item {
+.list-item {
     display: flex;
     align-items: center;
-    gap: 16px;
     padding: 16px;
-    background: var(--surface);
-    border-radius: var(--border-radius);
     text-decoration: none;
     color: var(--text-primary);
-    transition: var(--transition);
-    border: 1px solid transparent;
+    background: var(--surface);
+    transition: background 0.2s ease;
+    border-bottom: 1px solid var(--border);
+    position: relative;
 }
 
-.contact-item:hover {
+.list-item:last-child {
+    border-bottom: none;
+}
+
+.list-item:hover {
     background: var(--background);
-    border-color: var(--border);
-    box-shadow: var(--shadow-sm);
-    transform: translateY(-2px);
 }
 
-.icon-box {
-    width: 40px;
-    height: 40px;
-    background: white;
-    border-radius: 50%;
+.list-item:active {
+    background: rgba(0, 0, 0, 0.05);
+}
+
+/* Iconic Colors */
+.item-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--primary-color);
-    box-shadow: var(--shadow-sm);
+    margin-right: 14px;
+    flex-shrink: 0;
+    color: white;
 }
 
-.contact-content {
+.map-icon {
+    background: linear-gradient(135deg, #FF9500, #FF5E3A);
+}
+
+.phone-icon {
+    background: linear-gradient(135deg, #34C759, #30B0C7);
+}
+
+.chat-icon {
+    background: linear-gradient(135deg, #007AFF, #5856D6);
+}
+
+/* Content Layout */
+.item-content {
     flex: 1;
     display: flex;
     flex-direction: column;
-    gap: 4px;
-}
-
-.label {
-    font-size: 13px;
-    color: var(--text-secondary);
-}
-
-.value {
-    font-size: 15px;
-    font-weight: 600;
-}
-
-.arrow-icon {
-    color: var(--text-muted);
-}
-
-/* Contact Actions Grid */
-.contact-actions {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
-    /* Tăng khoảng cách giữa 2 nút */
-    margin-top: 8px;
-}
-
-.action-btn {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 16px 20px;
-    /* Tăng padding ngang để nội dung không sát viền */
-    border-radius: 16px;
-    /* Bo góc mềm mại hơn */
-    text-decoration: none;
-    transition: var(--transition);
-    color: white;
-    position: relative;
+    gap: 2px;
     overflow: hidden;
 }
 
-.action-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-}
-
-.sales-btn {
-    background: #0068ff;
-    /* Zalo Blue */
-}
-
-.sales-btn:hover {
-    background: #005ce6;
-}
-
-.support-btn {
-    background: #333333;
-    color: white;
-}
-
-.support-btn:hover {
-    background: #000000;
-}
-
-.btn-icon {
-    width: 36px;
-    height: 36px;
-    background: rgba(255, 255, 255, 0.2);
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-}
-
-.btn-info {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-}
-
-.btn-label {
-    font-size: 12px;
-    opacity: 0.9;
-}
-
-.btn-value {
+.item-title {
     font-size: 14px;
-    font-weight: 700;
-    letter-spacing: 0.5px;
+    color: var(--text-primary);
+    font-weight: 500;
 }
 
-/* Responsive */
-@media (max-width: 480px) {
-    .contact-actions {
-        grid-template-columns: 1fr;
-        /* Mobile stacked layout */
-        gap: 12px;
-    }
-
-    .action-btn {
-        padding: 16px;
-        /* Giữ padding thoải mái trên mobile */
-        justify-content: center;
-        /* Căn giữa nội dung trên mobile */
-    }
-
-    .btn-info {
-        align-items: flex-start;
-        /* Canh lề trái text */
-    }
+.item-subtitle {
+    font-size: 13px;
+    color: var(--text-secondary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
-/* Dark mode */
+.item-subtitle.highlight {
+    color: var(--primary-color);
+    font-weight: 600;
+}
+
+/* Chevron */
+.chevron-icon {
+    color: var(--text-muted);
+    opacity: 0.5;
+    margin-left: 8px;
+    width: 16px;
+    height: 16px;
+}
+
+/* Dark Mode */
 @media (prefers-color-scheme: dark) {
-    .icon-box {
-        background: #2c2c2e;
+    .contact-section {
+        border-top: none;
+    }
+
+    .compact-list {
+        background: #1c1c1e;
+        border-color: #38383a;
+    }
+
+    .list-item {
+        background: #1c1c1e;
+        border-bottom-color: #38383a;
         color: white;
     }
 
-    .contact-item:hover {
-        background: #1c1c1e;
-        border-color: #38383a;
+    .list-item:hover {
+        background: #2c2c2e;
+    }
+
+    .item-title {
+        color: white;
+    }
+
+    .item-subtitle {
+        color: #8e8e93;
+    }
+}
+
+/* Mobile Tweaks */
+@media (max-width: 480px) {
+    .contact-section {
+        padding: 0 16px;
+        /* Keep padding on mobile */
+    }
+
+    .item-icon {
+        width: 28px;
+        height: 28px;
+    }
+
+    .item-icon svg {
+        width: 16px;
+        height: 16px;
     }
 }
