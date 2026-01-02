@@ -1,0 +1,154 @@
+/* Contact Section Styles */
+.contact-section {
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 1px dashed var(--border);
+}
+
+.contact-card {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.contact-item {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px;
+    background: var(--surface);
+    border-radius: var(--border-radius);
+    text-decoration: none;
+    color: var(--text-primary);
+    transition: var(--transition);
+    border: 1px solid transparent;
+}
+
+.contact-item:hover {
+    background: var(--background);
+    border-color: var(--border);
+    box-shadow: var(--shadow-sm);
+    transform: translateY(-2px);
+}
+
+.icon-box {
+    width: 40px;
+    height: 40px;
+    background: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--primary-color);
+    box-shadow: var(--shadow-sm);
+}
+
+.contact-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.label {
+    font-size: 13px;
+    color: var(--text-secondary);
+}
+
+.value {
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.arrow-icon {
+    color: var(--text-muted);
+}
+
+/* Contact Actions Grid */
+.contact-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.action-btn {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px;
+    border-radius: var(--border-radius);
+    text-decoration: none;
+    transition: var(--transition);
+    color: white;
+}
+
+.action-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+.sales-btn {
+    background: #0068ff;
+    /* Zalo Blue */
+}
+
+.sales-btn:hover {
+    background: #005ce6;
+}
+
+.support-btn {
+    background: #333333;
+    color: white;
+}
+
+.support-btn:hover {
+    background: #000000;
+}
+
+.btn-icon {
+    width: 36px;
+    height: 36px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.btn-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.btn-label {
+    font-size: 12px;
+    opacity: 0.9;
+}
+
+.btn-value {
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+    .contact-actions {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Dark mode */
+@media (prefers-color-scheme: dark) {
+    .icon-box {
+        background: #2c2c2e;
+        color: white;
+    }
+
+    .contact-item:hover {
+        background: #1c1c1e;
+        border-color: #38383a;
+    }
+}

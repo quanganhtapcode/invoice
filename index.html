@@ -18,7 +18,7 @@
         href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📄</text></svg>">
 
     <link rel="stylesheet" href="css/styles.css">
-    <link rel="stylesheet" href="css/zalo.css">
+    <link rel="stylesheet" href="css/contact.css">
 </head>
 
 <body>
@@ -236,17 +236,74 @@
         </div>
     </div>
 
-    <!-- Zalo Contact Button -->
-    <a href="https://zalo.me/0813601054" target="_blank" rel="noopener noreferrer" class="zalo-btn">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path
-                d="M22 17.5C22 20 17.5 22 12 22C6.5 22 2 20 2 17.5C2 14.5 4 12.5 7 12C7.5 8 11.5 5 16 7C20.5 9 22 14 22 17.5Z"
-                fill="white" stroke="white" stroke-width="2" />
-            <text x="12" y="18" font-size="8" text-anchor="middle" fill="#0068ff" font-weight="bold"
-                font-family="Arial">Zalo</text>
-        </svg>
-        <span>Chat Zalo</span>
-    </a>
+    <!-- Contact & Store Info -->
+    <section class="form-section contact-section">
+        <h2 class="section-title">
+            <span class="section-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3 21l1.9-5.7a8.5 8.5 0 1 1 3.8 3.8z"></path>
+                </svg>
+            </span>
+            Liên hệ & Địa chỉ
+        </h2>
+
+        <div class="contact-card">
+            <a href="https://maps.app.goo.gl/27zvMtYMa9eAho9o6" target="_blank" class="contact-item address-item">
+                <div class="icon-box">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                        <circle cx="12" cy="10" r="3"></circle>
+                    </svg>
+                </div>
+                <div class="contact-content">
+                    <span class="label">Địa chỉ cửa hàng</span>
+                    <span class="value">16 Lê Gia Đỉnh, Hai Bà Trưng, Hà Nội</span>
+                </div>
+                <svg class="arrow-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="9 18 15 12 9 6"></polyline>
+                </svg>
+            </a>
+
+            <div class="contact-actions">
+                <!-- Zalo Mua Hàng -->
+                <a href="https://zalo.me/0919867730" target="_blank" class="action-btn sales-btn">
+                    <div class="btn-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path
+                                d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z">
+                            </path>
+                        </svg>
+                    </div>
+                    <div class="btn-info">
+                        <span class="btn-label">Gọi điện mua hàng</span>
+                        <span class="btn-value">0919.867.730</span>
+                    </div>
+                </a>
+
+                <!-- Zalo Hoá Đơn -->
+                <a href="https://zalo.me/0813601054" target="_blank" class="action-btn support-btn">
+                    <div class="btn-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                            <polyline points="14 2 14 8 20 8"></polyline>
+                            <line x1="16" y1="13" x2="8" y2="13"></line>
+                            <line x1="16" y1="17" x2="8" y2="17"></line>
+                            <polyline points="10 9 9 9 8 9"></polyline>
+                        </svg>
+                    </div>
+                    <div class="btn-info">
+                        <span class="btn-label">Hỗ trợ hoá đơn</span>
+                        <span class="btn-value">0813.601.054</span>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
 
     <!-- Toast Notification -->
     <div id="toast" class="toast hidden">
