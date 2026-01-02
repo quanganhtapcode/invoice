@@ -11,7 +11,7 @@ echo "📦 Deploying Invoice API to VPS..."
 VPS_HOST="203.55.176.10"
 VPS_USER="root"
 SSH_KEY="~/Desktop/key.pem"
-REMOTE_DIR="/var/www/invoice-api"
+REMOTE_DIR="/var/www/invoice.quanganh.org/api"
 
 # Create remote directory if not exists
 ssh -i $SSH_KEY $VPS_USER@$VPS_HOST "mkdir -p $REMOTE_DIR"
@@ -21,7 +21,7 @@ scp -i $SSH_KEY -r backend/* $VPS_USER@$VPS_HOST:$REMOTE_DIR/
 
 # Install dependencies and start server with PM2
 ssh -i $SSH_KEY $VPS_USER@$VPS_HOST << 'ENDSSH'
-cd /var/www/invoice-api
+cd /var/www/invoice.quanganh.org/api
 
 # Install Node.js dependencies
 npm install --production
