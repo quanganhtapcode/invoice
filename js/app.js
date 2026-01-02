@@ -99,7 +99,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function handleMSTInput(e) {
         // Allow numbers and hyphen
-        const value = e.target.value.replace(/[^0-9-]/g, '');
+        let value = e.target.value.replace(/[^0-9-]/g, '');
+
+        // Auto-insert hyphen after 10th digit if typing more
+        const pureNumbers = value.replace(/-/g, '');
+        if (pureNumbers.length > 10 && !value.includes('-')) {
+            value = pureNumbers.slice(0, 10) + '-' + pureNumbers.slice(10);
+        }
+
         e.target.value = value;
 
         // Clear previous timeout
