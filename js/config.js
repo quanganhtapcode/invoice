@@ -1,32 +1,24 @@
 /**
  * Configuration file for Invoice Request App
- * 
- * IMPORTANT: Replace the placeholder values with your actual credentials
  */
 
 const CONFIG = {
-    // Telegram Bot Configuration
-    // Get your bot token from @BotFather on Telegram
-    TELEGRAM_BOT_TOKEN: 'YOUR_BOT_TOKEN_HERE',
-    
-    // Your Telegram Chat ID (can be a user ID or group ID)
-    // To get your chat ID, send a message to your bot and visit:
-    // https://api.telegram.org/bot<YOUR_BOT_TOKEN>/getUpdates
-    TELEGRAM_CHAT_ID: 'YOUR_CHAT_ID_HERE',
-    
-    // Esgoo API for MST lookup
+    // Backend API URL (VPS server)
+    API_URL: 'https://invoice.quanganh.org/api',
+
+    // Esgoo API for MST lookup (called from frontend directly)
     ESGOO_API_URL: 'https://esgoo.net/api-mst/',
-    
+
     // Store Information
     STORE_NAME: 'Cửa hàng Cát Hải',
     STORE_EMAIL: 'cathai@example.com',
-    
+
     // Local Storage Keys
     STORAGE_KEYS: {
         INVOICES: 'invoice_requests',
         LAST_REQUEST: 'last_request'
     },
-    
+
     // Validation Rules
     VALIDATION: {
         MST_MIN_LENGTH: 10,

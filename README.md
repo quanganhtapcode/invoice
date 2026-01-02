@@ -1,85 +1,142 @@
-# 📄 Invoice Request - Cửa Hàng Cát Hải
+# Invoice Request - Cửa Hàng Cát Hải
 
-Ứng dụng web để khách hàng gửi yêu cầu xuất hóa đơn VAT cho Cửa hàng Cát Hải.
+Ứng dụng web để khách hàng gửi yêu cầu xuất hóa đơn VAT.
+
+## 🏗 Kiến trúc
+
+```
+┌──────────────────┐     ┌──────────────────┐     ┌──────────────┐
+│   Frontend       │────>│   Backend API    │────>│   Telegram   │
+│   (Vercel)       │     │   (VPS)          │     │   Bot        │
+└──────────────────┘     └──────────────────┘     └──────────────┘
+        │                         │
+        │                         │
+        ▼                         ▼
+  invoice.vercel.app      invoice.quanganh.org
+```
 
 ## ✨ Tính năng
 
-- 📝 **Form đẹp mắt** - Giao diện Apple-style với floating labels
-- 🔍 **Tra cứu MST tự động** - Tích hợp API Esgoo để lấy thông tin doanh nghiệp
-- 📷 **Chụp/Upload ảnh** - Hỗ trợ camera và chọn file
-- 📱 **Responsive** - Hoạt động tốt trên mọi thiết bị
-- 🌙 **Dark Mode** - Tự động theo system preference
-- 📲 **Gửi Telegram** - Thông báo qua Telegram Bot
-- 💾 **Lưu trữ** - Lưu dữ liệu vào localStorage
+- 📝 Form nhập thông tin khách hàng
+- 🔍 **Tra cứu MST tự động** từ API Esgoo
+- 📷 Upload/chụp ảnh hóa đơn
+- 📱 Gửi thông báo Telegram tự động
+- 💾 Lưu lịch sử (localStorage)
+- 🌙 Dark Mode
 
-## 🚀 Cài đặt
+## 🚀 Deploy
 
-### 1. Clone repo
-
-```bash
-git clone https://github.com/quanganhtapcode/invoice.git
-cd invoice
-```
-
-### 2. Cấu hình Telegram Bot
-
-Mở file `js/config.js` và cập nhật:
-
-```javascript
-const CONFIG = {
-    TELEGRAM_BOT_TOKEN: 'YOUR_BOT_TOKEN_HERE',  // Lấy từ @BotFather
-    TELEGRAM_CHAT_ID: 'YOUR_CHAT_ID_HERE',      // Chat ID của bạn
-    // ...
-};
-```
-
-#### Cách lấy Bot Token:
-1. Mở Telegram, tìm **@BotFather**
-2. Gửi `/newbot` và làm theo hướng dẫn
-3. Copy token được cung cấp
-
-#### Cách lấy Chat ID:
-1. Gửi tin nhắn bất kỳ đến bot của bạn
-2. Truy cập: `https://api.telegram.org/bot<TOKEN>/getUpdates`
-3. Tìm `"chat":{"id":XXXXX}` - XXXXX là Chat ID
-
-### 3. Deploy lên GitHub Pages
+### Frontend (Vercel)
 
 ```bash
-git add .
-git commit -m "Initial commit"
-git push origin main
+# Install Vercel CLI
+npm i -g vercel
+
+# Deploy
+cd Invoice
+vercel --prod
 ```
 
-Vào Settings > Pages > Source: Deploy from branch `main` / `root`
+Hoặc kết nối GitHub repo với Vercel dashboard.
+
+### Backend (VPS)
+
+```bash
+# SSH vào VPS
+ssh -i ~/Desktop/key.pem root@203.55.176.10
+
+# Tạo thư mục
+mkdir -p /var/www/invoice-api
+cd /var/www/invoice-api
+
+# Copy files (từ máy local)
+scp -i ~/Desktop/key.pem -r backend/* root@203.55.176.10:/var/www/invoice-api/
+
+# Trên VPS: cài đặt
+npm install --production
+
+# Chạy với PM2
+pm2 start server.js --name invoice-api
+pm2 save
+```
+
+### Nginx Configuration
+
+Thêm vào `/etc/nginx/sites-available/invoice`:
+
+```nginx
+server {
+    listen 80;
+    server_name invoice.quanganh.org;
+
+    location /api {
+        proxy_pass http://127.0.0.1:3000;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_cache_bypass $http_upgrade;
+        
+        # For file uploads
+        client_max_body_size 10M;
+    }
+}
+```
+
+Sau đó:
+```bash
+ln -s /etc/nginx/sites-available/invoice /etc/nginx/sites-enabled/
+nginx -t
+systemctl reload nginx
+```
 
 ## 📁 Cấu trúc
 
 ```
-invoice/
-├── index.html          # Trang chính
-├── css/
-│   └── styles.css      # Styles với dark mode
+Invoice/
+├── index.html          # Frontend
+├── css/styles.css      # Styles
 ├── js/
-│   ├── config.js       # Cấu hình Telegram
-│   ├── telegram.js     # Module gửi Telegram
-│   ├── storage.js      # Module localStorage
-│   └── app.js          # Logic chính
-└── README.md
+│   ├── config.js       # Config (API URL)
+│   ├── telegram.js     # API client
+│   ├── storage.js      # LocalStorage
+│   └── app.js          # Main logic
+├── backend/
+│   ├── package.json
+│   └── server.js       # Express API + Telegram
+├── vercel.json         # Vercel config
+└── deploy-vps.sh       # VPS deploy script
 ```
 
-## 🔧 API Esgoo
+## 🔧 API Endpoints
 
-Ứng dụng sử dụng API miễn phí từ [Esgoo.net](https://esgoo.net) để tra cứu thông tin doanh nghiệp:
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/api/health` | Health check |
+| POST | `/api/invoice` | Submit invoice (multipart/form-data) |
 
+### POST /api/invoice
+
+**Request (multipart/form-data):**
+- `name` - Họ tên (required)
+- `phone` - SĐT (required)
+- `email` - Email (required)
+- `mst` - Mã số thuế (required)
+- `companyName` - Tên công ty
+- `companyAddress` - Địa chỉ
+- `representative` - Người đại diện
+- `image` - Ảnh hóa đơn (required, file)
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Yêu cầu xuất hóa đơn đã được gửi thành công",
+  "invoiceId": "INV-ABC123"
+}
 ```
-GET https://esgoo.net/api-mst/{MST}.htm
-```
-
-## 📄 License
-
-MIT
 
 ---
 
-<p align="center">Made with ❤️ for Cửa Hàng Cát Hải</p>
+Made with ❤️ for Cửa Hàng Cát Hải
