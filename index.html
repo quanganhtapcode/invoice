@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yêu Cầu Xuất Hóa Đơn - Cửa Hàng Cát Hải</title>
+    <meta name="description" content="Gửi yêu cầu xuất hóa đơn VAT cho Cửa hàng Cát Hải. Tra cứu thông tin doanh nghiệp tự động từ mã số thuế.">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📄</text></svg>">
+    
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="app-container" id="app">
+        <!-- Main Form View -->
+        <div id="form-view">
+            <!-- Header -->
+            <header class="header">
+                <div class="logo-container">
+                    <div class="logo-icon">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                            <polyline points="14 2 14 8 20 8"></polyline>
+                            <line x1="16" y1="13" x2="8" y2="13"></line>
+                            <line x1="16" y1="17" x2="8" y2="17"></line>
+                            <polyline points="10 9 9 9 8 9"></polyline>
+                        </svg>
+                    </div>
+                </div>
+                <h1 class="header-title">Cát Hải</h1>
+                <p class="header-subtitle">Yêu cầu xuất hóa đơn</p>
+            </header>
+
+            <!-- Main Form -->
+            <main class="main-content">
+                <form id="invoice-form" class="invoice-form">
+                    <!-- Personal Information -->
+                    <section class="form-section">
+                        <h2 class="section-title">
+                            <span class="section-icon">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                    <circle cx="12" cy="7" r="4"></circle>
+                                </svg>
+                            </span>
+                            Thông tin cá nhân
+                        </h2>
+
+                        <div class="form-fields">
+                            <div class="input-group">
+                                <input type="text" id="name" name="name" placeholder=" " required>
+                                <label for="name">Họ và tên *</label>
+                            </div>
+
+                            <div class="input-group">
+                                <input type="tel" id="phone" name="phone" placeholder=" " required>
+                                <label for="phone">Số điện thoại *</label>
+                            </div>
+
+                            <div class="input-group">
+                                <input type="email" id="email" name="email" placeholder=" " required>
+                                <label for="email">Email *</label>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Company Information -->
+                    <section class="form-section">
+                        <h2 class="section-title">
+                            <span class="section-icon">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                                    <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                                </svg>
+                            </span>
+                            Thông tin doanh nghiệp
+                        </h2>
+
+                        <div class="form-fields">
+                            <div class="input-group has-loader">
+                                <input type="text" id="mst" name="mst" placeholder=" " maxlength="14" required>
+                                <label for="mst">Mã số thuế *</label>
+                                <div class="loader" id="mst-loader">
+                                    <div class="spinner"></div>
+                                </div>
+                            </div>
+
+                            <div id="company-info" class="company-info hidden">
+                                <div class="input-group readonly">
+                                    <input type="text" id="companyName" name="companyName" placeholder=" " readonly>
+                                    <label for="companyName">Tên công ty</label>
+                                    <span class="verified-badge" title="Đã xác thực">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                                            <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                                        </svg>
+                                    </span>
+                                </div>
+
+                                <div class="input-group readonly">
+                                    <textarea id="companyAddress" name="companyAddress" placeholder=" " rows="2" readonly></textarea>
+                                    <label for="companyAddress">Địa chỉ</label>
+                                </div>
+
+                                <div class="input-group readonly">
+                                    <input type="text" id="representative" name="representative" placeholder=" " readonly>
+                                    <label for="representative">Người đại diện</label>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Invoice Image Upload -->
+                    <section class="form-section">
+                        <h2 class="section-title">
+                            <span class="section-icon">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                                    <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                                    <polyline points="21 15 16 10 5 21"></polyline>
+                                </svg>
+                            </span>
+                            Ảnh hóa đơn *
+                        </h2>
+
+                        <input type="file" id="invoice-file" accept="image/*" capture="environment" hidden>
+
+                        <div id="upload-area" class="upload-area">
+                            <div class="upload-buttons">
+                                <button type="button" class="upload-btn" id="camera-btn">
+                                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+                                        <circle cx="12" cy="13" r="4"></circle>
+                                    </svg>
+                                    <span>Chụp ảnh</span>
+                                </button>
+
+                                <button type="button" class="upload-btn" id="upload-btn">
+                                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                        <polyline points="17 8 12 3 7 8"></polyline>
+                                        <line x1="12" y1="3" x2="12" y2="15"></line>
+                                    </svg>
+                                    <span>Tải lên</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div id="preview-area" class="preview-area hidden">
+                            <img id="preview-image" src="" alt="Invoice preview">
+                            <button type="button" class="change-image-btn" id="change-image-btn">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="1 4 1 10 7 10"></polyline>
+                                    <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
+                                </svg>
+                                Thay đổi
+                            </button>
+                        </div>
+                    </section>
+
+                    <!-- Error Message -->
+                    <div id="error-message" class="error-message hidden">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="12" y1="8" x2="12" y2="12"></line>
+                            <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                        </svg>
+                        <span id="error-text"></span>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button type="submit" class="submit-btn" id="submit-btn">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="22" y1="2" x2="11" y2="13"></line>
+                            <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                        </svg>
+                        <span>Gửi yêu cầu</span>
+                        <div class="btn-loader hidden">
+                            <div class="spinner white"></div>
+                        </div>
+                    </button>
+                </form>
+
+                <!-- Footer -->
+                <footer class="footer">
+                    <p class="footer-text">Cửa hàng Cát Hải</p>
+                    <p class="footer-copyright">© 2026 Bản quyền thuộc về Cát Hải</p>
+                </footer>
+            </main>
+        </div>
+
+        <!-- Success View -->
+        <div id="success-view" class="success-view hidden">
+            <div class="success-content">
+                <div class="success-icon">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                </div>
+                <h2 class="success-title">Yêu cầu đã được gửi</h2>
+                <p class="success-description">
+                    Chúng tôi đã nhận được yêu cầu xuất hóa đơn của bạn. 
+                    Cửa hàng Cát Hải sẽ liên hệ với bạn trong thời gian sớm nhất.
+                </p>
+                <button type="button" class="reset-btn" id="reset-btn">
+                    Gửi yêu cầu mới
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast hidden">
+        <span id="toast-message"></span>
+    </div>
+
+    <script src="js/config.js"></script>
+    <script src="js/telegram.js"></script>
+    <script src="js/storage.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>

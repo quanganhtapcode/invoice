@@ -1,0 +1,798 @@
+/* ========================================
+   CSS Variables & Base Styles
+   ======================================== */
+:root {
+    --primary-color: #000000;
+    --primary-hover: #333333;
+    --background: #ffffff;
+    --surface: #f8f8f8;
+    --surface-hover: #f0f0f0;
+    --border: #e5e5e5;
+    --border-focus: #000000;
+    --text-primary: #000000;
+    --text-secondary: #666666;
+    --text-muted: #999999;
+    --text-placeholder: #aaaaaa;
+    --error: #e53e3e;
+    --error-bg: #fff5f5;
+    --error-border: #fed7d7;
+    --success: #38a169;
+    --success-bg: #f0fff4;
+    --verified: #00c853;
+    
+    --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --border-radius: 12px;
+    --border-radius-sm: 8px;
+    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.06);
+    --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.08);
+    --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.12);
+    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Reset & Base */
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: var(--font-family);
+    background: var(--background);
+    color: var(--text-primary);
+    line-height: 1.6;
+    min-height: 100vh;
+}
+
+/* ========================================
+   Layout
+   ======================================== */
+.app-container {
+    min-height: 100vh;
+    padding: 40px 20px;
+}
+
+.main-content {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* ========================================
+   Header
+   ======================================== */
+.header {
+    max-width: 600px;
+    margin: 0 auto 60px;
+    text-align: center;
+}
+
+.logo-container {
+    margin-bottom: 24px;
+}
+
+.logo-icon {
+    width: 64px;
+    height: 64px;
+    background: linear-gradient(135deg, #000000 0%, #333333 100%);
+    border-radius: 16px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    box-shadow: var(--shadow-md);
+}
+
+.header-title {
+    font-size: clamp(32px, 8vw, 48px);
+    font-weight: 700;
+    color: var(--text-primary);
+    letter-spacing: -0.03em;
+    margin-bottom: 8px;
+}
+
+.header-subtitle {
+    font-size: 18px;
+    color: var(--text-secondary);
+    font-weight: 400;
+    letter-spacing: -0.01em;
+}
+
+/* ========================================
+   Form Sections
+   ======================================== */
+.form-section {
+    margin-bottom: 48px;
+}
+
+.section-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-primary);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.section-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    background: var(--surface);
+    border-radius: 8px;
+    color: var(--text-secondary);
+}
+
+.form-fields {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+/* ========================================
+   Input Groups (Floating Labels)
+   ======================================== */
+.input-group {
+    position: relative;
+}
+
+.input-group input,
+.input-group textarea {
+    width: 100%;
+    padding: 18px 20px;
+    font-size: 16px;
+    font-family: var(--font-family);
+    border: 1.5px solid var(--border);
+    border-radius: var(--border-radius);
+    background: var(--background);
+    color: var(--text-primary);
+    outline: none;
+    transition: var(--transition);
+}
+
+.input-group textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+.input-group label {
+    position: absolute;
+    left: 18px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 16px;
+    color: var(--text-placeholder);
+    pointer-events: none;
+    transition: var(--transition);
+    background: var(--background);
+    padding: 0 4px;
+}
+
+.input-group textarea + label {
+    top: 24px;
+}
+
+/* Focus & Filled States */
+.input-group input:focus,
+.input-group textarea:focus {
+    border-color: var(--border-focus);
+    box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.05);
+}
+
+.input-group input:focus + label,
+.input-group input:not(:placeholder-shown) + label,
+.input-group textarea:focus + label,
+.input-group textarea:not(:placeholder-shown) + label {
+    top: 0;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-secondary);
+}
+
+/* Readonly State */
+.input-group.readonly input,
+.input-group.readonly textarea {
+    background: var(--surface);
+    color: var(--text-primary);
+    cursor: default;
+}
+
+.input-group.readonly label {
+    background: linear-gradient(var(--background) 50%, var(--surface) 50%);
+}
+
+.input-group.readonly input:focus + label,
+.input-group.readonly textarea:focus + label {
+    top: 0;
+    font-size: 12px;
+}
+
+/* Verified Badge */
+.verified-badge {
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 24px;
+    height: 24px;
+    background: var(--verified);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    animation: scaleIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Loader in Input */
+.input-group.has-loader .loader {
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: none;
+}
+
+.input-group.has-loader .loader.active {
+    display: block;
+}
+
+/* Company Info Animation */
+.company-info {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    animation: slideDown 0.4s ease-out;
+}
+
+.company-info.hidden {
+    display: none;
+}
+
+/* ========================================
+   Upload Area
+   ======================================== */
+.upload-area {
+    animation: fadeIn 0.3s ease-out;
+}
+
+.upload-buttons {
+    display: flex;
+    gap: 12px;
+}
+
+.upload-btn {
+    flex: 1;
+    padding: 28px 20px;
+    background: var(--surface);
+    border: 2px dashed var(--border);
+    border-radius: var(--border-radius);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    transition: var(--transition);
+    font-family: var(--font-family);
+    color: var(--text-primary);
+}
+
+.upload-btn:hover {
+    border-color: var(--border-focus);
+    background: var(--background);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-sm);
+}
+
+.upload-btn span {
+    font-size: 14px;
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+.upload-btn svg {
+    color: var(--text-primary);
+    transition: var(--transition);
+}
+
+.upload-btn:hover svg {
+    transform: scale(1.1);
+}
+
+/* Preview Area */
+.preview-area {
+    position: relative;
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    border: 1.5px solid var(--border);
+    animation: fadeIn 0.3s ease-out;
+}
+
+.preview-area.hidden {
+    display: none;
+}
+
+.preview-area img {
+    width: 100%;
+    height: auto;
+    display: block;
+    max-height: 400px;
+    object-fit: contain;
+    background: var(--surface);
+}
+
+.change-image-btn {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    padding: 10px 16px;
+    background: rgba(0, 0, 0, 0.85);
+    color: white;
+    border: none;
+    border-radius: var(--border-radius-sm);
+    font-size: 14px;
+    font-weight: 500;
+    font-family: var(--font-family);
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    backdrop-filter: blur(10px);
+}
+
+.change-image-btn:hover {
+    background: rgba(0, 0, 0, 0.95);
+    transform: scale(1.02);
+}
+
+/* ========================================
+   Error Message
+   ======================================== */
+.error-message {
+    padding: 16px 20px;
+    background: var(--error-bg);
+    border: 1px solid var(--error-border);
+    border-radius: var(--border-radius);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 24px;
+    animation: shake 0.4s ease-out;
+}
+
+.error-message.hidden {
+    display: none;
+}
+
+.error-message svg {
+    color: var(--error);
+    flex-shrink: 0;
+}
+
+.error-message span {
+    font-size: 14px;
+    color: #c53030;
+    line-height: 1.5;
+}
+
+/* ========================================
+   Submit Button
+   ======================================== */
+.submit-btn {
+    width: 100%;
+    padding: 18px 24px;
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: var(--border-radius);
+    font-size: 16px;
+    font-weight: 600;
+    font-family: var(--font-family);
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    position: relative;
+    overflow: hidden;
+}
+
+.submit-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+    transition: 0.5s;
+}
+
+.submit-btn:hover::before {
+    left: 100%;
+}
+
+.submit-btn:hover:not(:disabled) {
+    background: var(--primary-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+.submit-btn:active:not(:disabled) {
+    transform: translateY(0);
+}
+
+.submit-btn:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.submit-btn .btn-loader {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.submit-btn .btn-loader.hidden {
+    display: none;
+}
+
+.submit-btn.loading svg:first-child,
+.submit-btn.loading span {
+    opacity: 0;
+}
+
+.submit-btn.loading .btn-loader {
+    display: flex;
+}
+
+/* ========================================
+   Footer
+   ======================================== */
+.footer {
+    margin-top: 60px;
+    text-align: center;
+    padding-top: 40px;
+    border-top: 1px solid var(--border);
+}
+
+.footer-text {
+    font-size: 14px;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+}
+
+.footer-copyright {
+    font-size: 13px;
+    color: #cccccc;
+}
+
+/* ========================================
+   Success View
+   ======================================== */
+.success-view {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+}
+
+.success-view.hidden {
+    display: none;
+}
+
+.success-content {
+    max-width: 480px;
+    width: 100%;
+    text-align: center;
+    animation: fadeIn 0.6s ease-out;
+}
+
+.success-icon {
+    width: 88px;
+    height: 88px;
+    border-radius: 50%;
+    background: var(--primary-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 32px;
+    color: white;
+    animation: scaleIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.2);
+}
+
+.success-title {
+    font-size: 28px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 16px;
+    letter-spacing: -0.02em;
+}
+
+.success-description {
+    font-size: 16px;
+    color: var(--text-secondary);
+    line-height: 1.7;
+    margin-bottom: 40px;
+}
+
+.reset-btn {
+    width: 100%;
+    padding: 18px 24px;
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: var(--border-radius);
+    font-size: 16px;
+    font-weight: 600;
+    font-family: var(--font-family);
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.reset-btn:hover {
+    background: var(--primary-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+/* ========================================
+   Toast Notification
+   ======================================== */
+.toast {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    background: rgba(0, 0, 0, 0.9);
+    color: white;
+    padding: 14px 24px;
+    border-radius: 100px;
+    font-size: 14px;
+    font-weight: 500;
+    opacity: 0;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 1000;
+    backdrop-filter: blur(10px);
+    box-shadow: var(--shadow-lg);
+}
+
+.toast.visible {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+}
+
+.toast.hidden {
+    display: block;
+}
+
+/* ========================================
+   Spinner
+   ======================================== */
+.spinner {
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--border);
+    border-top-color: var(--primary-color);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+.spinner.white {
+    border-color: rgba(255, 255, 255, 0.3);
+    border-top-color: white;
+}
+
+/* ========================================
+   Utility Classes
+   ======================================== */
+.hidden {
+    display: none !important;
+}
+
+/* ========================================
+   Animations
+   ======================================== */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes scaleIn {
+    from {
+        transform: scale(0);
+    }
+    to {
+        transform: scale(1);
+    }
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    20%, 60% { transform: translateX(-5px); }
+    40%, 80% { transform: translateX(5px); }
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* ========================================
+   Responsive Styles
+   ======================================== */
+@media (max-width: 640px) {
+    .app-container {
+        padding: 24px 16px;
+    }
+    
+    .header {
+        margin-bottom: 40px;
+    }
+    
+    .logo-icon {
+        width: 56px;
+        height: 56px;
+        border-radius: 14px;
+    }
+    
+    .logo-icon svg {
+        width: 28px;
+        height: 28px;
+    }
+    
+    .form-section {
+        margin-bottom: 36px;
+    }
+    
+    .section-title {
+        font-size: 12px;
+        margin-bottom: 18px;
+    }
+    
+    .input-group input,
+    .input-group textarea {
+        padding: 16px 18px;
+        font-size: 16px; /* Prevent zoom on iOS */
+    }
+    
+    .upload-btn {
+        padding: 24px 16px;
+    }
+    
+    .upload-btn svg {
+        width: 28px;
+        height: 28px;
+    }
+    
+    .submit-btn {
+        padding: 16px 20px;
+    }
+    
+    .footer {
+        margin-top: 40px;
+        padding-top: 32px;
+    }
+    
+    .success-icon {
+        width: 72px;
+        height: 72px;
+    }
+    
+    .success-icon svg {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .success-title {
+        font-size: 24px;
+    }
+    
+    .success-description {
+        font-size: 15px;
+    }
+}
+
+@media (max-width: 380px) {
+    .upload-buttons {
+        flex-direction: column;
+    }
+    
+    .upload-btn {
+        flex-direction: row;
+        padding: 16px 20px;
+        gap: 16px;
+    }
+    
+    .upload-btn svg {
+        width: 24px;
+        height: 24px;
+    }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --background: #000000;
+        --surface: #1c1c1e;
+        --surface-hover: #2c2c2e;
+        --border: #38383a;
+        --border-focus: #ffffff;
+        --text-primary: #ffffff;
+        --text-secondary: #a1a1a6;
+        --text-muted: #6e6e73;
+        --text-placeholder: #6e6e73;
+    }
+    
+    .logo-icon {
+        background: linear-gradient(135deg, #ffffff 0%, #d1d1d6 100%);
+        color: #000000;
+    }
+    
+    .submit-btn,
+    .reset-btn {
+        background: #ffffff;
+        color: #000000;
+    }
+    
+    .submit-btn:hover:not(:disabled),
+    .reset-btn:hover {
+        background: #d1d1d6;
+    }
+    
+    .success-icon {
+        background: #ffffff;
+        color: #000000;
+    }
+    
+    .verified-badge {
+        background: var(--verified);
+    }
+    
+    .spinner {
+        border-color: var(--border);
+        border-top-color: #ffffff;
+    }
+    
+    .spinner.white {
+        border-color: rgba(0, 0, 0, 0.3);
+        border-top-color: #000000;
+    }
+    
+    .input-group.readonly label {
+        background: linear-gradient(var(--background) 50%, var(--surface) 50%);
+    }
+}
