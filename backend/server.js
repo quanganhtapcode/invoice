@@ -1,6 +1,6 @@
 /**
  * Invoice API Backend Server
- * Handles invoice submissions and sends to Telegram
+ * Handles invoice submissions, storage, and Telegram notifications
  */
 
 const express = require('express');
@@ -10,36 +10,36 @@ const fetch = require('node-fetch');
 const FormData = require('form-data');
 const fs = require('fs');
 const path = require('path');
+const cron = require('node-cron');
 
 const app = express();
 
 // Configuration
 const CONFIG = {
     PORT: process.env.PORT || 3000,
+    // Use env vars in production ideally
     TELEGRAM_BOT_TOKEN: process.env.TELEGRAM_BOT_TOKEN || '8595016320:AAFxAisC35UXL3ukQ3Kg_qbORZ174zcCilo',
     TELEGRAM_CHAT_ID: process.env.TELEGRAM_CHAT_ID || '5245151002',
     STORE_NAME: 'Cửa hàng Cát Hải'
 };
 
-// Middleware
-app.use(cors({
-    origin: '*', // Allow all origins for now, can be restricted later
-    methods: ['GET', 'POST'],
-    allowedHeaders: ['Content-Type']
-}));
+// Data Persistence
+const DATA_DIR = path.join(__dirname, 'data');
+const UPLOAD_DIR = path.join(__dirname, 'uploads');
+const DB_FILE = path.join(DATA_DIR, 'invoices.json');
 
+// Ensure directories exist
+if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
+if (!fs.existsSync(UPLOAD_DIR)) fs.mkdirSync(UPLOAD_DIR, { recursive: true });
+
+// Middleware
+app.use(cors({ origin: '*', methods: ['GET', 'POST'] }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Multer configuration for file uploads
+// Multer Config
 const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        const uploadDir = path.join(__dirname, 'uploads');
-        if (!fs.existsSync(uploadDir)) {
-            fs.mkdirSync(uploadDir, { recursive: true });
-        }
-        cb(null, uploadDir);
-    },
+    destination: (req, file, cb) => cb(null, UPLOAD_DIR),
     filename: (req, file, cb) => {
         const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
         const ext = path.extname(file.originalname);
@@ -49,190 +49,156 @@ const storage = multer.diskStorage({
 
 const upload = multer({
     storage: storage,
-    limits: { fileSize: 10 * 1024 * 1024 }, // 10MB max
+    limits: { fileSize: 10 * 1024 * 1024 }, // 10MB
     fileFilter: (req, file, cb) => {
-        if (file.mimetype.startsWith('image/')) {
-            cb(null, true);
-        } else {
-            cb(new Error('Only images are allowed'), false);
-        }
+        if (file.mimetype.startsWith('image/')) cb(null, true);
+        else cb(new Error('Only images are allowed'), false);
     }
 });
 
-// Telegram API Functions
+// Database Helpers
+function saveInvoiceToDb(invoice) {
+    let invoices = [];
+    if (fs.existsSync(DB_FILE)) {
+        try {
+            invoices = JSON.parse(fs.readFileSync(DB_FILE, 'utf8'));
+        } catch (e) { console.error('Error reading DB:', e); }
+    }
+    invoices.push(invoice);
+    fs.writeFileSync(DB_FILE, JSON.stringify(invoices, null, 2));
+}
+
+function getTodayInvoices() {
+    if (!fs.existsSync(DB_FILE)) return [];
+    try {
+        const invoices = JSON.parse(fs.readFileSync(DB_FILE, 'utf8'));
+        const today = new Date().toDateString();
+        return invoices.filter(inv => new Date(inv.timestamp).toDateString() === today);
+    } catch (e) { return []; }
+}
+
+// Telegram Helpers
 async function sendTelegramMessage(text) {
-    const url = `https://api.telegram.org/bot${CONFIG.TELEGRAM_BOT_TOKEN}/sendMessage`;
-
-    const response = await fetch(url, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-            chat_id: CONFIG.TELEGRAM_CHAT_ID,
-            text: text,
-            parse_mode: 'HTML'
-        })
-    });
-
-    return response.json();
+    try {
+        const url = `https://api.telegram.org/bot${CONFIG.TELEGRAM_BOT_TOKEN}/sendMessage`;
+        await fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                chat_id: CONFIG.TELEGRAM_CHAT_ID,
+                text: text,
+                parse_mode: 'HTML'
+            })
+        });
+    } catch (e) { console.error('Telegram Send Message Error:', e); }
 }
 
 async function sendTelegramPhoto(imagePath, caption) {
-    const url = `https://api.telegram.org/bot${CONFIG.TELEGRAM_BOT_TOKEN}/sendPhoto`;
-
-    const formData = new FormData();
-    formData.append('chat_id', CONFIG.TELEGRAM_CHAT_ID);
-    formData.append('photo', fs.createReadStream(imagePath));
-
-    if (caption) {
-        formData.append('caption', caption);
-        formData.append('parse_mode', 'HTML');
-    }
-
-    const response = await fetch(url, {
-        method: 'POST',
-        body: formData
-    });
-
-    return response.json();
+    try {
+        const url = `https://api.telegram.org/bot${CONFIG.TELEGRAM_BOT_TOKEN}/sendPhoto`;
+        const formData = new FormData();
+        formData.append('chat_id', CONFIG.TELEGRAM_CHAT_ID);
+        formData.append('photo', fs.createReadStream(imagePath));
+        if (caption) {
+            formData.append('caption', caption);
+            formData.append('parse_mode', 'HTML');
+        }
+        await fetch(url, { method: 'POST', body: formData });
+    } catch (e) { console.error('Telegram Send Photo Error:', e); }
 }
 
-function formatInvoiceMessage(data) {
-    const timestamp = new Date().toLocaleString('vi-VN', {
-        timeZone: 'Asia/Ho_Chi_Minh',
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit',
-        hour: '2-digit',
-        minute: '2-digit'
-    });
+// Cron Jobs
 
-    return `🧾 <b>YÊU CẦU XUẤT HÓA ĐƠN MỚI</b>
-━━━━━━━━━━━━━━━━━━━━
+// 1. Cleanup old files (older than 7 days) everyday at 00:00
+cron.schedule('0 0 * * *', () => {
+    console.log('Running daily cleanup...');
+    fs.readdir(UPLOAD_DIR, (err, files) => {
+        if (err) return;
+        const now = Date.now();
+        const SEVEN_DAYS = 7 * 24 * 60 * 60 * 1000;
 
-📅 <b>Thời gian:</b> ${timestamp}
-
-👤 <b>THÔNG TIN KHÁCH HÀNG</b>
-• Họ tên: ${data.name}
-• Điện thoại: ${data.phone}
-• Email: ${data.email}
-
-🏢 <b>THÔNG TIN DOANH NGHIỆP</b>
-• MST: <code>${data.mst}</code>
-• Công ty: ${data.companyName || 'N/A'}
-• Địa chỉ: ${data.companyAddress || 'N/A'}
-• Đại diện: ${data.representative || 'N/A'}
-
-━━━━━━━━━━━━━━━━━━━━
-📌 <i>${CONFIG.STORE_NAME}</i>`;
-}
-
-function formatPhotoCaption(data) {
-    return `📷 Ảnh hóa đơn
-👤 ${data.name}
-📱 ${data.phone}
-🏢 MST: ${data.mst}`;
-}
-
-// Routes
-
-// Health check
-app.get('/api/health', (req, res) => {
-    res.json({
-        status: 'ok',
-        timestamp: new Date().toISOString(),
-        service: 'Invoice API'
+        files.forEach(file => {
+            const filePath = path.join(UPLOAD_DIR, file);
+            fs.stat(filePath, (err, stats) => {
+                if (err) return;
+                if (now - stats.mtimeMs > SEVEN_DAYS) {
+                    fs.unlink(filePath, () => console.log(`Deleted old file: ${file}`));
+                }
+            });
+        });
     });
 });
 
-// Submit invoice request
+// 2. Daily Report at 20:00 (8 PM)
+cron.schedule('0 20 * * *', async () => {
+    console.log('Sending daily report...');
+    const todayInvoices = getTodayInvoices();
+
+    if (todayInvoices.length === 0) {
+        await sendTelegramMessage(`📅 <b>BÁO CÁO NGÀY ${new Date().toLocaleDateString('vi-VN')}</b>\n\nHôm nay không có yêu cầu hóa đơn nào.`);
+        return;
+    }
+
+    let message = `📅 <b>BÁO CÁO NGÀY ${new Date().toLocaleDateString('vi-VN')}</b>\n`;
+    message += `Tổng số: <b>${todayInvoices.length} yêu cầu</b>\n────────────────\n`;
+
+    todayInvoices.forEach((inv, index) => {
+        message += `${index + 1}. <b>${inv.companyName || 'N/A'}</b> - MST: ${inv.mst}\n`;
+        message += `   (Khách: ${inv.name} - ${inv.phone})\n\n`;
+    });
+
+    await sendTelegramMessage(message);
+});
+
+// Routes
+app.get('/api/health', (req, res) => {
+    res.json({ status: 'ok', timestamp: new Date().toISOString() });
+});
+
 app.post('/api/invoice', upload.single('image'), async (req, res) => {
     try {
         let { name, phone, email, mst, companyName, companyAddress, representative } = req.body;
+        name = name || 'Khách hàng';
 
-        name = name || 'Khách hàng'; // Default name if not provided
-
-        // Validate required fields (Name is optional now)
-        if (!phone || !email || !mst) {
-            return res.status(400).json({
-                success: false,
-                message: 'Vui lòng điền đầy đủ thông tin bắt buộc'
-            });
+        if (!phone || !email || !mst || !req.file) {
+            return res.status(400).json({ success: false, message: 'Thiếu thông tin bắt buộc' });
         }
 
-        if (!req.file) {
-            return res.status(400).json({
-                success: false,
-                message: 'Vui lòng tải lên ảnh hóa đơn'
-            });
-        }
+        const timestamp = new Date().toISOString();
+        const invoiceData = {
+            id: 'INV-' + Date.now().toString(36).toUpperCase(),
+            timestamp,
+            name, phone, email, mst, companyName, companyAddress, representative,
+            imagePath: req.file.path
+        };
 
-        const invoiceData = { name, phone, email, mst, companyName, companyAddress, representative };
+        // 1. Save to DB
+        saveInvoiceToDb(invoiceData);
 
-        console.log('Received invoice request:', invoiceData);
-        console.log('Image file:', req.file.path);
+        // 2. Send Telegram (Async)
+        const caption = `📷 Hóa đơn mới\nMST: ${mst}\nKH: ${name} - ${phone}`;
+        await sendTelegramPhoto(req.file.path, caption);
 
-        // Send photo with short caption
-        const photoCaption = formatPhotoCaption(invoiceData);
-        const photoResult = await sendTelegramPhoto(req.file.path, photoCaption);
+        const detailMsg = `🧾 <b>YÊU CẦU MỚI</b>\nMST: <code>${mst}</code>\nCty: ${companyName}\nĐ/c: ${companyAddress}\nKH: ${name} (${phone})\nEmail: ${email}`;
+        await sendTelegramMessage(detailMsg);
 
-        if (!photoResult.ok) {
-            console.error('Failed to send photo:', photoResult);
-        }
-
-        // Send detailed message
-        const message = formatInvoiceMessage(invoiceData);
-        const messageResult = await sendTelegramMessage(message);
-
-        if (!messageResult.ok) {
-            console.error('Failed to send message:', messageResult);
-        }
-
-        // Clean up uploaded file after sending
-        setTimeout(() => {
-            fs.unlink(req.file.path, (err) => {
-                if (err) console.error('Failed to delete temp file:', err);
-            });
-        }, 5000);
-
-        // Generate invoice ID
-        const invoiceId = 'INV-' + Date.now().toString(36).toUpperCase();
+        // 3. Response
+        // Note: We DO NOT delete the file here anymore. Cron will do it in 7 days.
 
         res.json({
             success: true,
-            message: 'Yêu cầu xuất hóa đơn đã được gửi thành công',
-            invoiceId: invoiceId
+            message: 'Đã nhận yêu cầu',
+            invoiceId: invoiceData.id
         });
 
     } catch (error) {
-        console.error('Error processing invoice:', error);
-        res.status(500).json({
-            success: false,
-            message: 'Có lỗi xảy ra. Vui lòng thử lại sau.'
-        });
+        console.error('Processing Error:', error);
+        res.status(500).json({ success: false, message: 'Lỗi server' });
     }
 });
 
-// Error handling middleware
-app.use((error, req, res, next) => {
-    console.error('Server error:', error);
-
-    if (error instanceof multer.MulterError) {
-        if (error.code === 'LIMIT_FILE_SIZE') {
-            return res.status(400).json({
-                success: false,
-                message: 'Ảnh quá lớn. Vui lòng chọn ảnh nhỏ hơn 10MB'
-            });
-        }
-    }
-
-    res.status(500).json({
-        success: false,
-        message: 'Có lỗi xảy ra. Vui lòng thử lại sau.'
-    });
-});
-
-// Start server
+// Start
 app.listen(CONFIG.PORT, '0.0.0.0', () => {
-    console.log(`🚀 Invoice API Server running on port ${CONFIG.PORT}`);
-    console.log(`📱 Telegram Bot configured for chat: ${CONFIG.TELEGRAM_CHAT_ID}`);
+    console.log(`🚀 API Server running on port ${CONFIG.PORT}`);
+    console.log('📅 Cron jobs scheduled (Cleanup: 00:00, Report: 20:00)');
 });
