@@ -98,7 +98,8 @@ document.addEventListener('DOMContentLoaded', function () {
     // ============ MST Lookup ============
 
     function handleMSTInput(e) {
-        const value = e.target.value.replace(/\D/g, '').slice(0, 14);
+        // Allow numbers and hyphen
+        const value = e.target.value.replace(/[^0-9-]/g, '');
         e.target.value = value;
 
         // Clear previous timeout
@@ -106,24 +107,38 @@ document.addEventListener('DOMContentLoaded', function () {
             clearTimeout(mstLookupTimeout);
         }
 
+        // Clean MST for checking length (remove hyphens)
+        const cleanMst = value.replace(/-/g, '');
+
         // Hide company info if MST is too short
-        if (value.length < 10) {
+        if (cleanMst.length < 10) {
             companyInfoSection.classList.add('hidden');
+            // Remove success class/style if any
             return;
         }
 
-        // Debounce lookup
-        mstLookupTimeout = setTimeout(() => {
-            lookupMST(value);
-        }, 500);
+        // Only lookup if length is valid (10 or 13 digits commonly)
+        if (cleanMst.length === 10 || cleanMst.length >= 13) {
+            // Debounce lookup
+            mstLookupTimeout = setTimeout(() => {
+                lookupMST(value); // Pass original value with potential hyphens
+            }, 500);
+        }
     }
 
     async function lookupMST(mst) {
         showMSTLoader(true);
         hideError();
 
+        // Ensure section is visible while loading? No, keep hidden until success to avoid empty boxes
+        // But if refreshing, existing data might layout weirdly.
+
         try {
+            // Esgoo API works best with clean numeric string usually, or standard format
             const response = await fetch(`${CONFIG.ESGOO_API_URL}${mst}.htm`);
+
+            if (!response.ok) throw new Error('Network response was not ok');
+
             const data = await response.json();
 
             if (data.error === 0 && data.data) {
@@ -132,21 +147,32 @@ document.addEventListener('DOMContentLoaded', function () {
                 companyAddressInput.value = data.data.dc || '';
                 representativeInput.value = data.data.daidien || '';
 
+                // Format Address if name is too long?
+
                 // Show company info section with animation
                 companyInfoSection.classList.remove('hidden');
 
+                // Add visual success indicator to MST input
+                mstInput.parentElement.classList.add('success');
+
                 showToast('Đã tìm thấy thông tin doanh nghiệp');
             } else {
-                showError('Không tìm thấy thông tin doanh nghiệp với MST này');
-                companyInfoSection.classList.add('hidden');
+                // If API returns error (not found)
+                // Only show error if user has stopped typing meaningful length
+                console.warn('MST Lookup failed:', data);
+                // Don't hide section immediately if user is just correcting?
+                // But data is invalid, so resetting or hiding is safer
+                // companyInfoSection.classList.add('hidden'); // Optional: hide if not found
+                showError('Không tìm thấy thông tin doanh nghiệp. Vui lòng kiểm tra lại MST.');
             }
         } catch (error) {
-            console.error('MST lookup error:', error);
-            showError('Lỗi kết nối API. Vui lòng thử lại sau');
+            console.error('MST Lookup Error:', error);
+            // Silent fail or show generic error?
         } finally {
             showMSTLoader(false);
         }
     }
+
 
     function showMSTLoader(show) {
         if (show) {
