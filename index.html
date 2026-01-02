@@ -283,16 +283,38 @@
                     </div>
                 </section>
             </main>
+        </div> <!-- End form-view -->
 
-            <!-- Toast Notification -->
-            <div id="toast" class="toast hidden">
-                <span id="toast-message"></span>
+        <!-- Success View -->
+        <div id="success-view" class="success-view hidden">
+            <div class="success-content">
+                <div class="success-icon">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                </div>
+                <h2 class="success-title">Yêu cầu đã được gửi</h2>
+                <p class="success-description">
+                    Chúng tôi đã nhận được yêu cầu xuất hóa đơn của bạn.
+                    Cửa hàng Cát Hải sẽ liên hệ với bạn trong thời gian sớm nhất.
+                </p>
+                <button type="button" class="reset-btn" id="reset-btn">
+                    Gửi yêu cầu mới
+                </button>
             </div>
+        </div>
+    </div> <!-- End app-container -->
 
-            <script src="js/config.js"></script>
-            <script src="js/telegram.js"></script>
-            <script src="js/storage.js"></script>
-            <script src="js/app.js"></script>
+    <!-- Toast Notification -->
+    <div id="toast" class="toast hidden">
+        <span id="toast-message"></span>
+    </div>
+
+    <script src="js/config.js"></script>
+    <script src="js/telegram.js"></script>
+    <script src="js/storage.js"></script>
+    <script src="js/app.js"></script>
 </body>
 
 </html>
