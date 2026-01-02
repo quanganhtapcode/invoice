@@ -150,11 +150,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
             if (data.error === 0 && data.data) {
                 // Fill company info
-                companyNameInput.value = data.data.ten || '';
-                companyAddressInput.value = data.data.dc || '';
-                representativeInput.value = data.data.daidien || '';
-
-                // Format Address if name is too long?
+                const d = data.data;
+                companyNameInput.value = d.name || d.ten || '';
+                companyAddressInput.value = d.address || d.dia_chi || d.dc || '';
+                representativeInput.value = d.manager || d.nguoi_dai_dien || d.daidien || d.owner || '';
 
                 // Show company info section with animation
                 companyInfoSection.classList.remove('hidden');
