@@ -68,18 +68,24 @@
 .contact-actions {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 12px;
+    gap: 16px;
+    /* Tăng khoảng cách giữa 2 nút */
+    margin-top: 8px;
 }
 
 .action-btn {
     display: flex;
     align-items: center;
     gap: 12px;
-    padding: 16px;
-    border-radius: var(--border-radius);
+    padding: 16px 20px;
+    /* Tăng padding ngang để nội dung không sát viền */
+    border-radius: 16px;
+    /* Bo góc mềm mại hơn */
     text-decoration: none;
     transition: var(--transition);
     color: white;
+    position: relative;
+    overflow: hidden;
 }
 
 .action-btn:hover {
@@ -137,6 +143,20 @@
 @media (max-width: 480px) {
     .contact-actions {
         grid-template-columns: 1fr;
+        /* Mobile stacked layout */
+        gap: 12px;
+    }
+
+    .action-btn {
+        padding: 16px;
+        /* Giữ padding thoải mái trên mobile */
+        justify-content: center;
+        /* Căn giữa nội dung trên mobile */
+    }
+
+    .btn-info {
+        align-items: flex-start;
+        /* Canh lề trái text */
     }
 }
 
