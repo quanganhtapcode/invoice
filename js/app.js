@@ -243,11 +243,12 @@ document.addEventListener('DOMContentLoaded', function () {
         const email = emailInput.value.trim();
         const mst = mstInput.value.trim();
 
-        if (!name) {
-            showError('Vui lòng nhập họ và tên');
-            nameInput.focus();
-            return false;
-        }
+        // Optional name
+        // if (!name) {
+        //     showError('Vui lòng nhập họ và tên');
+        //     nameInput.focus();
+        //     return false;
+        // }
 
         if (!phone || !CONFIG.VALIDATION.PHONE_PATTERN.test(phone)) {
             showError('Số điện thoại không hợp lệ');

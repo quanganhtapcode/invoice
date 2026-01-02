@@ -1,21 +1,26 @@
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Yêu Cầu Xuất Hóa Đơn - Cửa Hàng Cát Hải</title>
-    <meta name="description" content="Gửi yêu cầu xuất hóa đơn VAT cho Cửa hàng Cát Hải. Tra cứu thông tin doanh nghiệp tự động từ mã số thuế.">
-    
+    <meta name="description"
+        content="Gửi yêu cầu xuất hóa đơn VAT cho Cửa hàng Cát Hải. Tra cứu thông tin doanh nghiệp tự động từ mã số thuế.">
+
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
+
     <!-- Favicon -->
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📄</text></svg>">
-    
+    <link rel="icon" type="image/svg+xml"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📄</text></svg>">
+
     <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/zalo.css">
 </head>
+
 <body>
     <div class="app-container" id="app">
         <!-- Main Form View -->
@@ -24,7 +29,8 @@
             <header class="header">
                 <div class="logo-container">
                     <div class="logo-icon">
-                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
                             <polyline points="14 2 14 8 20 8"></polyline>
                             <line x1="16" y1="13" x2="8" y2="13"></line>
@@ -40,11 +46,62 @@
             <!-- Main Form -->
             <main class="main-content">
                 <form id="invoice-form" class="invoice-form">
+
+                    <!-- Company Information (Moved to Top) -->
+                    <section class="form-section">
+                        <h2 class="section-title">
+                            <span class="section-icon">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                                    <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                                </svg>
+                            </span>
+                            Thông tin doanh nghiệp
+                        </h2>
+
+                        <div class="form-fields">
+                            <div class="input-group has-loader">
+                                <input type="text" id="mst" name="mst" placeholder=" " maxlength="14" required
+                                    autofocus>
+                                <label for="mst">Mã số thuế *</label>
+                                <div class="loader" id="mst-loader">
+                                    <div class="spinner"></div>
+                                </div>
+                            </div>
+
+                            <div id="company-info" class="company-info hidden">
+                                <div class="input-group readonly">
+                                    <input type="text" id="companyName" name="companyName" placeholder=" " readonly>
+                                    <label for="companyName">Tên công ty</label>
+                                    <span class="verified-badge" title="Đã xác thực">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                                            <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
+                                        </svg>
+                                    </span>
+                                </div>
+
+                                <div class="input-group readonly">
+                                    <textarea id="companyAddress" name="companyAddress" placeholder=" " rows="2"
+                                        readonly></textarea>
+                                    <label for="companyAddress">Địa chỉ</label>
+                                </div>
+
+                                <div class="input-group readonly">
+                                    <input type="text" id="representative" name="representative" placeholder=" "
+                                        readonly>
+                                    <label for="representative">Người đại diện</label>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
                     <!-- Personal Information -->
                     <section class="form-section">
                         <h2 class="section-title">
                             <span class="section-icon">
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                     <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
                                     <circle cx="12" cy="7" r="4"></circle>
                                 </svg>
@@ -54,8 +111,8 @@
 
                         <div class="form-fields">
                             <div class="input-group">
-                                <input type="text" id="name" name="name" placeholder=" " required>
-                                <label for="name">Họ và tên *</label>
+                                <input type="text" id="name" name="name" placeholder=" ">
+                                <label for="name">Họ và tên (Không bắt buộc)</label>
                             </div>
 
                             <div class="input-group">
@@ -70,56 +127,13 @@
                         </div>
                     </section>
 
-                    <!-- Company Information -->
-                    <section class="form-section">
-                        <h2 class="section-title">
-                            <span class="section-icon">
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-                                    <polyline points="9 22 9 12 15 12 15 22"></polyline>
-                                </svg>
-                            </span>
-                            Thông tin doanh nghiệp
-                        </h2>
-
-                        <div class="form-fields">
-                            <div class="input-group has-loader">
-                                <input type="text" id="mst" name="mst" placeholder=" " maxlength="14" required>
-                                <label for="mst">Mã số thuế *</label>
-                                <div class="loader" id="mst-loader">
-                                    <div class="spinner"></div>
-                                </div>
-                            </div>
-
-                            <div id="company-info" class="company-info hidden">
-                                <div class="input-group readonly">
-                                    <input type="text" id="companyName" name="companyName" placeholder=" " readonly>
-                                    <label for="companyName">Tên công ty</label>
-                                    <span class="verified-badge" title="Đã xác thực">
-                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                                            <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
-                                        </svg>
-                                    </span>
-                                </div>
-
-                                <div class="input-group readonly">
-                                    <textarea id="companyAddress" name="companyAddress" placeholder=" " rows="2" readonly></textarea>
-                                    <label for="companyAddress">Địa chỉ</label>
-                                </div>
-
-                                <div class="input-group readonly">
-                                    <input type="text" id="representative" name="representative" placeholder=" " readonly>
-                                    <label for="representative">Người đại diện</label>
-                                </div>
-                            </div>
-                        </div>
-                    </section>
 
                     <!-- Invoice Image Upload -->
                     <section class="form-section">
                         <h2 class="section-title">
                             <span class="section-icon">
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                     <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
                                     <circle cx="8.5" cy="8.5" r="1.5"></circle>
                                     <polyline points="21 15 16 10 5 21"></polyline>
@@ -133,15 +147,19 @@
                         <div id="upload-area" class="upload-area">
                             <div class="upload-buttons">
                                 <button type="button" class="upload-btn" id="camera-btn">
-                                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                        <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+                                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path
+                                            d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z">
+                                        </path>
                                         <circle cx="12" cy="13" r="4"></circle>
                                     </svg>
                                     <span>Chụp ảnh</span>
                                 </button>
 
                                 <button type="button" class="upload-btn" id="upload-btn">
-                                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                         <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
                                         <polyline points="17 8 12 3 7 8"></polyline>
                                         <line x1="12" y1="3" x2="12" y2="15"></line>
@@ -154,7 +172,8 @@
                         <div id="preview-area" class="preview-area hidden">
                             <img id="preview-image" src="" alt="Invoice preview">
                             <button type="button" class="change-image-btn" id="change-image-btn">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                     <polyline points="1 4 1 10 7 10"></polyline>
                                     <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
                                 </svg>
@@ -165,7 +184,8 @@
 
                     <!-- Error Message -->
                     <div id="error-message" class="error-message hidden">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <circle cx="12" cy="12" r="10"></circle>
                             <line x1="12" y1="8" x2="12" y2="12"></line>
                             <line x1="12" y1="16" x2="12.01" y2="16"></line>
@@ -175,7 +195,8 @@
 
                     <!-- Submit Button -->
                     <button type="submit" class="submit-btn" id="submit-btn">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <line x1="22" y1="2" x2="11" y2="13"></line>
                             <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
                         </svg>
@@ -198,13 +219,14 @@
         <div id="success-view" class="success-view hidden">
             <div class="success-content">
                 <div class="success-icon">
-                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
+                        stroke-linecap="round" stroke-linejoin="round">
                         <polyline points="20 6 9 17 4 12"></polyline>
                     </svg>
                 </div>
                 <h2 class="success-title">Yêu cầu đã được gửi</h2>
                 <p class="success-description">
-                    Chúng tôi đã nhận được yêu cầu xuất hóa đơn của bạn. 
+                    Chúng tôi đã nhận được yêu cầu xuất hóa đơn của bạn.
                     Cửa hàng Cát Hải sẽ liên hệ với bạn trong thời gian sớm nhất.
                 </p>
                 <button type="button" class="reset-btn" id="reset-btn">
@@ -213,6 +235,18 @@
             </div>
         </div>
     </div>
+
+    <!-- Zalo Contact Button -->
+    <a href="https://zalo.me/0813601054" target="_blank" rel="noopener noreferrer" class="zalo-btn">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path
+                d="M22 17.5C22 20 17.5 22 12 22C6.5 22 2 20 2 17.5C2 14.5 4 12.5 7 12C7.5 8 11.5 5 16 7C20.5 9 22 14 22 17.5Z"
+                fill="white" stroke="white" stroke-width="2" />
+            <text x="12" y="18" font-size="8" text-anchor="middle" fill="#0068ff" font-weight="bold"
+                font-family="Arial">Zalo</text>
+        </svg>
+        <span>Chat Zalo</span>
+    </a>
 
     <!-- Toast Notification -->
     <div id="toast" class="toast hidden">
@@ -224,4 +258,5 @@
     <script src="js/storage.js"></script>
     <script src="js/app.js"></script>
 </body>
+
 </html>

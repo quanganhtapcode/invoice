@@ -147,10 +147,12 @@ app.get('/api/health', (req, res) => {
 // Submit invoice request
 app.post('/api/invoice', upload.single('image'), async (req, res) => {
     try {
-        const { name, phone, email, mst, companyName, companyAddress, representative } = req.body;
+        let { name, phone, email, mst, companyName, companyAddress, representative } = req.body;
 
-        // Validate required fields
-        if (!name || !phone || !email || !mst) {
+        name = name || 'Khách hàng'; // Default name if not provided
+
+        // Validate required fields (Name is optional now)
+        if (!phone || !email || !mst) {
             return res.status(400).json({
                 success: false,
                 message: 'Vui lòng điền đầy đủ thông tin bắt buộc'
