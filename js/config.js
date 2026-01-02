@@ -3,8 +3,8 @@
  */
 
 const CONFIG = {
-    // Backend API URL (VPS server)
-    API_URL: 'https://invoice.quanganh.org/api',
+    // Backend API URL (Updated to new subdomain)
+    API_URL: 'https://api-invoice.quanganh.org/api',
 
     // Esgoo API for MST lookup (called from frontend directly)
     ESGOO_API_URL: 'https://esgoo.net/api-mst/',
