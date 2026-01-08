@@ -28,7 +28,7 @@ const TelegramBot = {
                 formData.append('image', imageFile);
             }
 
-            const response = await fetch(`${CONFIG.API_URL}/invoice`, {
+            const response = await fetch(`${CONFIG.API_URL}/api/invoice`, {
                 method: 'POST',
                 body: formData
             });

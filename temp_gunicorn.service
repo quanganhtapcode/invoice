@@ -1,0 +1,14 @@
+[Unit]
+Description=Gunicorn instance to serve EC2 Flask app
+After=network.target
+
+[Service]
+User=root
+Group=root
+WorkingDirectory=/var/www/api.quanganh.org
+Environment="PATH=/var/www/api.quanganh.org/.venv/bin"
+Environment="PYTHONPATH=/var/www/api.quanganh.org"
+ExecStart=/var/www/api.quanganh.org/.venv/bin/gunicorn --workers 4 --bind 0.0.0.0:8000 --error-logfile /var/log/gunicorn-error.log backend.server:app
+
+[Install]
+WantedBy=multi-user.target

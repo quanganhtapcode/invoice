@@ -19,7 +19,7 @@
     --success: #38a169;
     --success-bg: #f0fff4;
     --verified: #00c853;
-    
+
     --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     --border-radius: 12px;
     --border-radius-sm: 8px;
@@ -30,7 +30,9 @@
 }
 
 /* Reset & Base */
-*, *::before, *::after {
+*,
+*::before,
+*::after {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
@@ -55,7 +57,7 @@ body {
    ======================================== */
 .app-container {
     min-height: 100vh;
-    padding: 40px 20px;
+    padding: 20px 16px;
 }
 
 .main-content {
@@ -68,19 +70,19 @@ body {
    ======================================== */
 .header {
     max-width: 600px;
-    margin: 0 auto 60px;
+    margin: 0 auto 24px;
     text-align: center;
 }
 
 .logo-container {
-    margin-bottom: 24px;
+    margin-bottom: 16px;
 }
 
 .logo-icon {
-    width: 64px;
-    height: 64px;
+    width: 48px;
+    height: 48px;
     background: linear-gradient(135deg, #000000 0%, #333333 100%);
-    border-radius: 16px;
+    border-radius: 12px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -89,15 +91,15 @@ body {
 }
 
 .header-title {
-    font-size: clamp(32px, 8vw, 48px);
+    font-size: clamp(24px, 6vw, 32px);
     font-weight: 700;
     color: var(--text-primary);
     letter-spacing: -0.03em;
-    margin-bottom: 8px;
+    margin-bottom: 4px;
 }
 
 .header-subtitle {
-    font-size: 18px;
+    font-size: 15px;
     color: var(--text-secondary);
     font-weight: 400;
     letter-spacing: -0.01em;
@@ -178,7 +180,7 @@ body {
     padding: 0 4px;
 }
 
-.input-group textarea + label {
+.input-group textarea+label {
     top: 24px;
 }
 
@@ -189,10 +191,10 @@ body {
     box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.05);
 }
 
-.input-group input:focus + label,
-.input-group input:not(:placeholder-shown) + label,
-.input-group textarea:focus + label,
-.input-group textarea:not(:placeholder-shown) + label {
+.input-group input:focus+label,
+.input-group input:not(:placeholder-shown)+label,
+.input-group textarea:focus+label,
+.input-group textarea:not(:placeholder-shown)+label {
     top: 0;
     font-size: 12px;
     font-weight: 500;
@@ -211,8 +213,8 @@ body {
     background: linear-gradient(var(--background) 50%, var(--surface) 50%);
 }
 
-.input-group.readonly input:focus + label,
-.input-group.readonly textarea:focus + label {
+.input-group.readonly input:focus+label,
+.input-group.readonly textarea:focus+label {
     top: 0;
     font-size: 12px;
 }
@@ -416,7 +418,7 @@ body {
     left: -100%;
     width: 100%;
     height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
     transition: 0.5s;
 }
 
@@ -613,6 +615,7 @@ body {
         opacity: 0;
         transform: translateY(20px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
@@ -623,6 +626,7 @@ body {
     from {
         transform: scale(0);
     }
+
     to {
         transform: scale(1);
     }
@@ -633,6 +637,7 @@ body {
         opacity: 0;
         transform: translateY(-10px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
@@ -640,9 +645,21 @@ body {
 }
 
 @keyframes shake {
-    0%, 100% { transform: translateX(0); }
-    20%, 60% { transform: translateX(-5px); }
-    40%, 80% { transform: translateX(5px); }
+
+    0%,
+    100% {
+        transform: translateX(0);
+    }
+
+    20%,
+    60% {
+        transform: translateX(-5px);
+    }
+
+    40%,
+    80% {
+        transform: translateX(5px);
+    }
 }
 
 @keyframes spin {
@@ -656,71 +673,72 @@ body {
    ======================================== */
 @media (max-width: 640px) {
     .app-container {
-        padding: 24px 16px;
+        padding: 20px 16px;
     }
-    
+
     .header {
-        margin-bottom: 40px;
+        margin-bottom: 24px;
     }
-    
+
     .logo-icon {
-        width: 56px;
-        height: 56px;
-        border-radius: 14px;
+        width: 40px;
+        height: 40px;
+        border-radius: 10px;
     }
-    
+
     .logo-icon svg {
-        width: 28px;
-        height: 28px;
+        width: 20px;
+        height: 20px;
     }
-    
+
     .form-section {
         margin-bottom: 36px;
     }
-    
+
     .section-title {
         font-size: 12px;
         margin-bottom: 18px;
     }
-    
+
     .input-group input,
     .input-group textarea {
         padding: 16px 18px;
-        font-size: 16px; /* Prevent zoom on iOS */
+        font-size: 16px;
+        /* Prevent zoom on iOS */
     }
-    
+
     .upload-btn {
         padding: 24px 16px;
     }
-    
+
     .upload-btn svg {
         width: 28px;
         height: 28px;
     }
-    
+
     .submit-btn {
         padding: 16px 20px;
     }
-    
+
     .footer {
         margin-top: 40px;
         padding-top: 32px;
     }
-    
+
     .success-icon {
         width: 72px;
         height: 72px;
     }
-    
+
     .success-icon svg {
         width: 40px;
         height: 40px;
     }
-    
+
     .success-title {
         font-size: 24px;
     }
-    
+
     .success-description {
         font-size: 15px;
     }
@@ -730,13 +748,13 @@ body {
     .upload-buttons {
         flex-direction: column;
     }
-    
+
     .upload-btn {
         flex-direction: row;
         padding: 16px 20px;
         gap: 16px;
     }
-    
+
     .upload-btn svg {
         width: 24px;
         height: 24px;
@@ -756,42 +774,42 @@ body {
         --text-muted: #6e6e73;
         --text-placeholder: #6e6e73;
     }
-    
+
     .logo-icon {
         background: linear-gradient(135deg, #ffffff 0%, #d1d1d6 100%);
         color: #000000;
     }
-    
+
     .submit-btn,
     .reset-btn {
         background: #ffffff;
         color: #000000;
     }
-    
+
     .submit-btn:hover:not(:disabled),
     .reset-btn:hover {
         background: #d1d1d6;
     }
-    
+
     .success-icon {
         background: #ffffff;
         color: #000000;
     }
-    
+
     .verified-badge {
         background: var(--verified);
     }
-    
+
     .spinner {
         border-color: var(--border);
         border-top-color: #ffffff;
     }
-    
+
     .spinner.white {
         border-color: rgba(0, 0, 0, 0.3);
         border-top-color: #000000;
     }
-    
+
     .input-group.readonly label {
         background: linear-gradient(var(--background) 50%, var(--surface) 50%);
     }
@@ -811,4 +829,7 @@ body {
     margin: 16px 0 24px;
     transition: opacity 0.2s;
 }
-.success-contact-btn:hover { opacity: 0.9; }
+
+.success-contact-btn:hover {
+    opacity: 0.9;
+}
