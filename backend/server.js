@@ -33,7 +33,7 @@ if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
 if (!fs.existsSync(UPLOAD_DIR)) fs.mkdirSync(UPLOAD_DIR, { recursive: true });
 
 // Middleware
-app.use(cors({ origin: '*', methods: ['GET', 'POST'] }));
+// app.use(cors({ origin: '*', methods: ['GET', 'POST'] })); // Handled by Nginx Gateway
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
