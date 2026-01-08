@@ -34,8 +34,16 @@ const TelegramBot = {
             });
 
             if (!response.ok) {
-                const error = await response.json();
-                throw new Error(error.message || 'Failed to send invoice');
+                let errorMessage = `Error ${response.status}: ${response.statusText}`;
+                try {
+                    const error = await response.json();
+                    errorMessage = error.message || errorMessage;
+                } catch (e) {
+                    // Response was not JSON (e.g. Nginx HTML error page)
+                    const text = await response.text();
+                    if (text.includes('Too Large')) errorMessage = 'Ảnh quá lớn (trên 10MB)';
+                }
+                throw new Error(errorMessage);
             }
 
             const result = await response.json();
